@@ -1,3 +1,9 @@
+skalibs (2.8.1.0-4) stable; urgency=medium
+
+  * Refine fix for upgrade from old s6-packaging repository
+
+ -- multiplexd <multi@in-addr.xyz>  Fri, 13 Sep 2019 19:07:09 +0100
+
 skalibs (2.8.1.0-3) stable; urgency=medium
 
   * Fix upgrade from old s6-packaging repository with Replaces: field

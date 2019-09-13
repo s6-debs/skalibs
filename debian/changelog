@@ -1,3 +1,10 @@
+skalibs (2.8.1.0-2) stable; urgency=medium
+
+  * Bump revision to enable upgrade path from old s6-packaging
+    repository.
+
+ -- multiplexd <multi@in-addr.xyz>  Fri, 13 Sep 2019 17:44:17 +0100
+
 skalibs (2.8.1.0-1) stable; urgency=medium
 
   * Initial release.

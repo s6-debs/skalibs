@@ -24,7 +24,6 @@ CPPFLAGS_ALL := $(CPPFLAGS_AUTO) $(CPPFLAGS)
 CFLAGS_ALL := $(CFLAGS_AUTO) $(CFLAGS)
 LDFLAGS_ALL := $(LDFLAGS_AUTO) $(LDFLAGS)
 LDLIBS_ALL := $(LDLIBS_AUTO) $(LDLIBS)
-REALCC = $(CROSS_COMPILE)$(CC)
 AR := $(CROSS_COMPILE)ar
 RANLIB := $(CROSS_COMPILE)ranlib
 STRIP := $(CROSS_COMPILE)strip
@@ -32,7 +31,7 @@ INSTALL := ./tools/install.sh
 
 TYPES := size uid gid pid time dev ino
 
-ALL_SRCS := $(wildcard src/lib*/*.c)
+ALL_SRCS := $(sort $(wildcard src/lib*/*.c))
 ALL_DOBJS := $(ALL_SRCS:%.c=%.lo)
 ifeq ($(strip $(STATIC_LIBS_ARE_PIC)),)
 ALL_SOBJS := $(ALL_SRCS:%.c=%.o)
@@ -119,32 +118,32 @@ $(DESTDIR)$(includedir)/$(package)/%.h: src/include/$(package)/%.h
 	exec $(INSTALL) -D -m 644 $< $@
 
 %.o: %.c
-	exec $(REALCC) $(CPPFLAGS_ALL) $(CFLAGS_ALL) -c -o $@ $<
+	exec $(CC) $(CPPFLAGS_ALL) $(CFLAGS_ALL) -c -o $@ $<
 
 %.lo: %.c
-	exec $(REALCC) $(CPPFLAGS_ALL) $(CFLAGS_ALL) $(CFLAGS_SHARED) -c -o $@ $<
+	exec $(CC) $(CPPFLAGS_ALL) $(CFLAGS_ALL) $(CFLAGS_SHARED) -c -o $@ $<
 
 libskarnet.a.xyzzy: $(ALL_SOBJS)
 	exec $(AR) rc $@ $^
 	exec $(RANLIB) $@
 
 libskarnet.so.xyzzy: $(ALL_DOBJS)
-	exec $(REALCC) -o $@ $(CFLAGS_ALL) $(CFLAGS_SHARED) $(LDFLAGS_ALL) $(LDFLAGS_SHARED) -Wl,-soname,libskarnet.so.$(version_M) $^ $(SOCKET_LIB) $(SPAWN_LIB) $(SYSCLOCK_LIB) $(TAINNOW_LIB) $(TIMER_LIB) $(UTIL_LIB)
+	exec $(CC) -o $@ $(CFLAGS_ALL) $(CFLAGS_SHARED) $(LDFLAGS_ALL) $(LDFLAGS_SHARED) -Wl,-soname,libskarnet.so.$(version_M) $^ $(SOCKET_LIB) $(SPAWN_LIB) $(SYSCLOCK_LIB) $(TAINNOW_LIB) $(TIMER_LIB) $(UTIL_LIB)
 
 .PHONY: it all clean distclean tgz strip install install-data install-sysdeps install-dynlib install-lib install-include
 
 .DELETE_ON_ERROR:
 
-src/include/$(package)/sysdeps.h: $(sysdeps)/sysdeps.h
-	exec cat < $< > $@
+src/include/$(package)/sysdeps.h: $(sysdeps)/sysdeps $(sysdeps)/target
+	exec tools/gen-sysdepsh.sh `cat $(sysdeps)/target` < $(sysdeps)/sysdeps > $@
 
-src/include/$(package)/uint16.h: $(sysdeps)/sysdeps src/headers/bits-header src/headers/bits-footer src/headers/bits-lendian src/headers/bits-bendian src/headers/bits-stdint src/headers/bits-template
+src/include/$(package)/uint16.h: $(sysdeps)/sysdeps src/headers/bits-header src/headers/bits-footer src/headers/bits-lendian src/headers/bits-bendian src/headers/bits-template src/headers/uint64-include src/include/$(package)/uint64.h
 	exec tools/gen-bits.sh $(sysdeps)/sysdeps 16 6 7 5 17 > $@
 
-src/include/$(package)/uint32.h: $(sysdeps)/sysdeps src/headers/bits-header src/headers/bits-footer src/headers/bits-lendian src/headers/bits-bendian src/headers/bits-stdint src/headers/bits-template
+src/include/$(package)/uint32.h: $(sysdeps)/sysdeps src/headers/bits-header src/headers/bits-footer src/headers/bits-lendian src/headers/bits-bendian src/headers/bits-template src/headers/uint64-include src/include/$(package)/uint64.h
 	exec tools/gen-bits.sh $(sysdeps)/sysdeps 32 11 13 9 33 > $@
 
-src/include/$(package)/uint64.h: $(sysdeps)/sysdeps src/headers/bits-header src/headers/bits-footer src/headers/bits-lendian src/headers/bits-bendian src/headers/bits-stdint src/headers/bits-template src/headers/uint64-ulong64 src/headers/uint64-noulong64
+src/include/$(package)/uint64.h: $(sysdeps)/sysdeps src/headers/bits-header src/headers/bits-footer src/headers/bits-lendian src/headers/bits-bendian src/headers/bits-template src/headers/uint64-ulong64 src/headers/uint64-noulong64 src/headers/uint64-defs src/headers/uint64-macros
 	exec tools/gen-bits.sh $(sysdeps)/sysdeps 64 21 25 17 65 > $@
 
 src/include/$(package)/types.h: src/include/$(package)/uint16.h src/include/$(package)/uint32.h src/include/$(package)/uint64.h $(sysdeps)/sysdeps src/headers/types-header src/headers/types-footer src/headers/unsigned-template src/headers/signed-template

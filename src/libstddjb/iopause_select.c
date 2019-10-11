@@ -1,10 +1,6 @@
 /* ISC license. */
 
-/* OpenBSD needs that for EOVERFLOW. wtfbsdseriously */
-#ifndef _BSD_SOURCE
-#define _BSD_SOURCE
-#endif
-
+#include <skalibs/bsdsnowflake.h>
 #include <string.h>  /* Solaris... */
 #include <errno.h>
 #include <sys/select.h>
@@ -39,6 +35,7 @@ int iopause_select (iopause_fd *x, unsigned int len, tain_t const *deadline, tai
       x[i].revents = 0 ;
       if (x[i].fd >= 0)
       {
+        if (x[i].fd >= FD_SETSIZE) return (errno = EMFILE, -1) ;
         if (x[i].fd >= nfds) nfds = x[i].fd + 1 ;
         if (x[i].events & IOPAUSE_READ) FD_SET(x[i].fd, &rfds) ;
         if (x[i].events & IOPAUSE_WRITE) FD_SET(x[i].fd, &wfds) ;

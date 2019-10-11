@@ -1,3 +1,9 @@
+skalibs (2.9.0.0-1) stable; urgency=medium
+
+  * New upstream release.
+
+ -- multiplexd <multi@in-addr.xyz>  Fri, 11 Oct 2019 23:24:35 +0100
+
 skalibs (2.8.1.0-4) stable; urgency=medium
 
   * Refine fix for upgrade from old s6-packaging repository

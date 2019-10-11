@@ -25,7 +25,7 @@ Package: libskarnet-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends}, libskarnet2.8 (= ${binary:Version})
+Depends: ${misc:Depends}, libskarnet2.9 (= ${binary:Version})
 Replaces: skalibs-dev (<= 2.8.1.0-1)
 Conflicts: skalibs-dev (<= 2.8.1.0-1)
 Description: Public domain general-purpose libraries (development files)

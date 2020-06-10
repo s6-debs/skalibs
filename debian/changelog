@@ -1,3 +1,9 @@
+skalibs (2.9.2.1-2) stable; urgency=low
+
+  * Source package fixes and metadata cleaning.
+
+ -- multiplexd <multi@in-addr.xyz>  Wed, 10 Jun 2020 19:28:55 +0100
+
 skalibs (2.9.2.1-1) stable; urgency=medium
 
   * New upstream release.

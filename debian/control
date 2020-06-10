@@ -2,7 +2,6 @@ Source: skalibs
 Section: libs
 Priority: optional
 Maintainer: multiplexd <multi@in-addr.xyz>
-Uploaders: multiplexd <multi@in-addr.xyz>
 Build-Depends: debhelper (>= 10), quilt
 Standards-Version: 3.9.8
 Homepage: https://skarnet.org/software/skalibs/

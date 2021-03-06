@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 10), quilt
 Standards-Version: 3.9.8
 Homepage: https://skarnet.org/software/skalibs/
 
-Package: libskarnet2.9
+Package: libskarnet2.10
 Architecture: any
 Multi-Arch: same
 Section: libs
@@ -24,7 +24,7 @@ Package: libskarnet-dev
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: ${misc:Depends}, libskarnet2.9 (= ${binary:Version})
+Depends: ${misc:Depends}, libskarnet2.10 (= ${binary:Version})
 Replaces: skalibs-dev (<= 2.8.1.0-1)
 Conflicts: skalibs-dev (<= 2.8.1.0-1)
 Description: Public domain general-purpose libraries (development files)

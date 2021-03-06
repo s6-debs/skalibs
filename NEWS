@@ -1,5 +1,36 @@
 Changelog for skalibs.
 
+In 2.10.0.2
+-----------
+
+ - Bugfixes.
+
+
+In 2.10.0.1
+-----------
+
+ - Bugfixes.
+
+
+In 2.10.0.0
+-----------
+
+ - New openc_* functions.
+ - New function: ipc_bind_reuse_lock(), taking a lock before
+unconditionally deleting the socket.
+ - ipc_bind_reuse() rewritten to use ipc_bind_reuse_lock(),
+so it does the right thing instead of clobbering sockets.
+ - Complete revamping of the pathexec functions, see exec.h.
+ - Revamping of the locking functions.
+ - Use of standard O_NONBLOCK and O_CLOEXEC instead of adhoc
+DJBUNIX_FLAG_NB and DJBUNIX_FLAG_COE.
+ - Better header separation; webipc.h removed (stuff moved to
+socket.h)
+ - New function: mkptemp2(), creating a fifo with a templated
+name (like mkptemp) but with options for O_NONBLOCK and O_CLOEXEC.
+ - New sysdep to test for chroot().
+
+
 In 2.9.3.0
 ----------
 

@@ -28,6 +28,7 @@
 #include <skalibs/djbunix.h>
 #include <skalibs/envalloc.h>
 #include <skalibs/env.h>
+#include <skalibs/exec.h>
 #include <skalibs/fmtscan.h>
 #include <skalibs/functypes.h>
 #include <skalibs/gccattributes.h>
@@ -50,6 +51,5 @@
 #include <skalibs/strerr.h>
 #include <skalibs/strerr2.h>
 #include <skalibs/tai.h>
-#include <skalibs/webipc.h>
 
 #endif

@@ -22,12 +22,12 @@ static ssize_t readnclose (int fd, char *s, size_t n)
 
 ssize_t openreadnclose (char const *file, char *s, size_t n)
 {
-  int fd = open_readb(file) ;
+  int fd = openbc_read(file) ;
   return fd < 0 ? fd : readnclose(fd, s, n) ;
 }
 
 ssize_t openreadnclose_nb (char const *file, char *s, size_t n)
 {
-  int fd = open_read(file) ;
+  int fd = openc_read(file) ;
   return fd < 0 ? fd : readnclose(fd, s, n) ;
 }

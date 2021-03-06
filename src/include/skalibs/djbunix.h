@@ -6,22 +6,19 @@
 #include <sys/types.h>
 #include <sys/uio.h>
 #include <sys/wait.h>
+#include <fcntl.h>
+
 #include <skalibs/gccattributes.h>
 #include <skalibs/stralloc.h>
-#include <skalibs/envalloc.h>
-#include <skalibs/posixplz.h>
-
-#define DJBUNIX_FLAG_NB  0x01U
-#define DJBUNIX_FLAG_COE 0x02U
 
 extern int coe (int) ;
 extern int uncoe (int) ;
 extern int ndelay_on (int) ;
 extern int ndelay_off (int) ;
 extern int pipe_internal (int *, unsigned int) ;
-#define pipenb(p) pipe_internal(p, DJBUNIX_FLAG_NB)
-#define pipecoe(p) pipe_internal(p, DJBUNIX_FLAG_COE)
-#define pipenbcoe(p) pipe_internal(p, DJBUNIX_FLAG_NB|DJBUNIX_FLAG_COE)
+#define pipenb(p) pipe_internal(p, O_NONBLOCK)
+#define pipecoe(p) pipe_internal(p, O_CLOEXEC)
+#define pipenbcoe(p) pipe_internal(p, O_NONBLOCK|O_CLOEXEC)
 extern int fd_copy (int, int) ;
 extern int fd_copy2 (int, int, int, int) ;
 extern int fd_move (int, int) ;
@@ -34,44 +31,32 @@ extern int fd_cat (int, int) ;
 extern size_t fd_catn (int, int, size_t) ;
 extern int fd_ensure_open (int, int) ;
 #define fd_sanitize() (fd_ensure_open(0, 0) && fd_ensure_open(1, 1) && fd_ensure_open(2, 1))
-extern int lock_ex (int) ;
-extern int lock_exnb (int) ;
-extern int lock_sh (int) ;
-extern int lock_shnb (int) ;
-extern int lock_un (int) ;
-extern void lock_unx (int) ;
+extern void fd_shutdown (int, int) ;
+
+extern int fd_lock (int, int, int) ;
+extern void fd_unlock (int) ;
+extern int fd_islocked (int) ;
+
 extern int open2 (char const *, unsigned int) ;
 extern int open3 (char const *, unsigned int, unsigned int) ;
 extern int open_read (char const *) ;
+extern int openc_read (char const *) ;
 extern int openb_read (char const *) ;
+extern int openbc_read (char const *) ;
 extern int open_readb (char const *) ;
+extern int openc_readb (char const *) ;
 extern int open_excl (char const *) ;
+extern int openc_excl (char const *) ;
 extern int open_append (char const *) ;
+extern int openc_append (char const *) ;
 extern int open_create (char const *) ;
+extern int openc_create (char const *) ;
 extern int open_trunc (char const *) ;
+extern int openc_trunc (char const *) ;
 extern int open_write (char const *) ;
-extern int socket_internal (int, int, int, unsigned int) ;
-extern int socketpair_internal (int, int, int, unsigned int, int *) ;
+extern int openc_write (char const *) ;
 
 extern size_t path_canonicalize (char *, char const *, int) ;
-
-extern int pathexec_env (char const *, char const *) ;
-extern void pathexec_r (char const *const *, char const *const *, size_t, char const *, size_t) ;
-extern void pathexec_r_name (char const *, char const *const *, char const *const *, size_t, char const *, size_t) ;
-extern void pathexec_fromenv (char const *const *, char const *const *, size_t) ;
-extern void pathexec_run (char const *, char const *const *, char const *const *) ;
-extern void pathexec0_run (char const *const *, char const *const *) ;
-extern void pathexec (char const *const *) ;
-extern void pathexec0 (char const *const *) ;
-
-extern void xpathexec_r (char const *const *, char const *const *, size_t, char const *, size_t) gccattr_noreturn ;
-extern void xpathexec_r_name (char const *, char const *const *, char const *const *, size_t, char const *, size_t) gccattr_noreturn ;
-extern void xpathexec_fromenv (char const *const *, char const *const *, size_t) gccattr_noreturn ;
-extern void xexecvep (char const *, char const *const *, char const *const *, char const *) gccattr_noreturn ;
-extern void xpathexec_run (char const *, char const *const *, char const *const *) gccattr_noreturn ;
-extern void xpathexec0_run (char const *const *, char const *const *) gccattr_noreturn ;
-extern void xpathexec (char const *const *) gccattr_noreturn ;
-extern void xpathexec0 (char const *const *) gccattr_noreturn ;
 
 extern pid_t wait_nointr (int *) ;
 extern pid_t waitpid_nointr (pid_t, int *, int) ;

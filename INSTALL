@@ -6,12 +6,13 @@ Build Instructions
 
   - A POSIX-compliant C development environment
   - GNU make version 3.81 or later
-  - If cross-compiling: the sysdeps for your target architecture
-    (see the "Cross-compilation" section below)
+  - If cross-compiling: knowing the value for the irreducible
+sysdeps for your target architecture. See the "Cross-compilation"
+section below.
 
  This software will install on any operating system that implements
 POSIX.1-2008, available at:
-  http://pubs.opengroup.org/onlinepubs/9699919799/
+  https://pubs.opengroup.org/onlinepubs/9699919799/
 
 
 * Standard usage
@@ -113,6 +114,9 @@ configure is: --with-sysdep-K=V
  For instance, to say that the target has a working pseudorandom
 number generator in /dev/urandom, you would give the following
 option to configure: --with-sysdep-devurandom=yes
+ If there are additional arguments to the sysdep, such as linker
+flags, give them separated by commas. Example:
+--with-sysdep-posixspawn=yes,-lrt
 
  ./configure --help lists all the sysdeps you need to manually
 provide a value for when cross-compiling.

@@ -5,12 +5,12 @@
 #include <fcntl.h>
 #include <errno.h>
 
-#include <skalibs/posixishard.h>
 #include <skalibs/types.h>
 #include <skalibs/allreadwrite.h>
 #include <skalibs/djbunix.h>
 #include <skalibs/textmessage.h>
 #include <skalibs/textclient.h>
+#include <skalibs/posixishard.h>
 
 int textclient_server_init_frompipe (textmessage_receiver_t *in, textmessage_sender_t *syncout, textmessage_sender_t *asyncout, char const *before, size_t beforelen, char const *after, size_t afterlen, tain_t const *deadline, tain_t *stamp)
 {
@@ -24,8 +24,8 @@ int textclient_server_init_frompipe (textmessage_receiver_t *in, textmessage_sen
   if (sanitize_read(textmessage_timed_receive(in, &v, deadline, stamp)) <= 0) return 0 ;
   if (v.iov_len != beforelen || memcmp(v.iov_base, before, beforelen)) return (errno = EPROTO, 0) ;
   if (fcntl(asyncfd, F_GETFD) < 0) return 0 ;
-  if (!textmessage_timed_send(syncout, after, afterlen, deadline, stamp)) return 0 ;
   textmessage_sender_init(asyncout, asyncfd) ;
   if (!textmessage_timed_send(asyncout, after, afterlen, deadline, stamp)) return 0 ;
+  if (!textmessage_timed_send(syncout, after, afterlen, deadline, stamp)) return 0 ;
   return 1 ;
 }
